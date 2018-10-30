@@ -1,0 +1,25 @@
+{
+  "name": "quiniquiniquini6",
+  "version": "1.0.0",
+  "description": "Chequea los resultados del quini6 desde paginas web",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "Quini6"
+  ],
+  "author": "Jorge Valentini",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "mocha": "^5.2.0"
+  },
+  "dependencies": {
+    "node-fetch": "^2.2.0",
+    "node-html-parser": "^1.1.10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jdvalentini/quiniquiniquini6.git"
+  }
+}
