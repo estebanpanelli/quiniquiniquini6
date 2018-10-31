@@ -184,7 +184,7 @@ const results = {
             if (FORMAT == 'colorterm'){var text = '\x1b[1m\x1b[36mPsst... Creo que ganaste algo...\x1b[0m\x1b[1m\r\n'}
             else if (FORMAT == 'html'){var text = '<h2>Psst... Creo que ganaste algo...</h2>\r\n'}
             else if (FORMAT == 'term'){var text = '\x1b[1mPsst... Creo que ganaste algo...\x1b[22m\r\n'}
-        }
+        } else var text = ''
 
         for (i in RESULTS.sorteos){
             if (FORMAT == 'html'){
@@ -239,14 +239,14 @@ const runtime = {
   \x1b[1mUSAGE:\x1b[22m node index.js <Tu Jugada> [-o {html|term|colorterm|nagios}]
   \x1b[1mEXAMPLE:\x1b[22m node index.js 4 7 15 25 32 38             # Devuelve el sorteo con tus apuestas resaltadas
   \x1b[1mEXAMPLE:\x1b[22m node index.js 4 7 15 25 32 38 -o html     # Devuelve el sorteo con tus apuestas resaltadas en formato HTML (Util para mail)
-  \x1b[1mEXAMPLE:\x1b[22m nodeaba index.js 4 7 15 25 32 38 -o nagios   # Devuelve codigos de error para Nagios (0:ganaste algo, 2:no ganaste nada, 3:ni idea)
+  \x1b[1mEXAMPLE:\x1b[22m node index.js 4 7 15 25 32 38 -o nagios   # Devuelve codigos de error para Nagios (0:ganaste algo, 2:no ganaste nada, 3:ni idea)
 `
         console.log(usage)
         if (EXITCODE !== undefined) process.exit(EXITCODE)
     },
 }
 
-console.log(`Config: ${JSON.stringify(global.gConfig)}`)
+// console.log(`Config: ${JSON.stringify(global.gConfig)}`)
 
 var args = runtime.getArguments(process.argv)
 

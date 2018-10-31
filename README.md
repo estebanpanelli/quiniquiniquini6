@@ -14,19 +14,21 @@ El programa busca en varias paginas los resultados del ultimo sorteo de Quini6 y
 `node index.js <Tu Jugada> [-o {html|term|colorterm|nagios}`
 
 `-o` especifica el formato de salida, siendo estos:
-* html: STDOUT formateado en HTML
-* term: STDOUT formateado para salida en consola (Linux)
-* colorterm: STDOUT formateado para salida en consola a colores (si, adivinaste!)
-* nagios: La salida es con codigo de error para usar con Nagios (0:ganaste algo, 2:no ganaste nada, 3:ni idea)
+* **html**: STDOUT formateado en HTML
+* **term**: STDOUT formateado para salida en consola (Linux)
+* **colorterm**: STDOUT formateado para salida en consola a colores (si, adivinaste!)
+* **nagios**: La salida es con codigo de error para usar con Nagios (0:ganaste algo, 2:no ganaste nada, 3:ni idea)
 
 Proximamente `-m` para mail
 
 ## Ejemplos
-`node index.js 1 3 5 7 9 11          # Devuelve el sorteo con tus apuestas resaltadas`
-`node index.js 1 3 5 7 9 11 -o html  # Devuelve el sorteo con tus apuestas resaltadas en formato HTML (Util para mail)`
+```bash
+node index.js 1 3 5 7 9 11          # Devuelve el sorteo con tus apuestas resaltadas
+node index.js 1 3 5 7 9 11 -o html  # Devuelve el sorteo con tus apuestas resaltadas en formato HTML (Util para mail)
+```
 
 A la salida se vera algo como (Formato html):
-```
+```html
                 <h3> Tradicional <h3>
                 0 10 18 20 21 43
                 
