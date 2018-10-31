@@ -11,7 +11,7 @@ npm install
 ## Uso
 El programa busca en varias paginas los resultados del ultimo sorteo de Quini6 y lo cruza contra tu jugada.
 
-**USO:** `node index.js <Tu Jugada> [-o {html|term|colorterm|md|nagios}`
+**USO:** `node index.js <Tu Jugada> [-o {html|term|colorterm|md|nagios}] [-m]`
 
 `-o` especifica el formato de salida, siendo estos:
 * **html**: STDOUT formateado en HTML
@@ -22,7 +22,7 @@ El programa busca en varias paginas los resultados del ultimo sorteo de Quini6 y
 
 Por defecto el formato sera `md`
 
-Proximamente `-m` para mail
+`-m` utiliza las opciones dadas en el archivo de configuracion para enviar un correo a una lista de destinatarios, vea la seccion del archivo de configuracion.
 
 ## Ejemplos
 ```bash
@@ -30,24 +30,72 @@ node index.js 1 3 5 7 9 11          # Devuelve el sorteo con tus apuestas resalt
 node index.js 1 3 5 7 9 11 -o html  # Devuelve el sorteo con tus apuestas resaltadas en formato HTML (Util para mail)
 ```
 
-A la salida se vera algo como (Formato html):
-```html
-                <h3> Tradicional <h3>
+A la salida se vera algo como (Formato markdown):
+```
+Sorteo: 2614 (Wed Nov 28 2018 00:00:00 GMT-0500 (EST)
+
+                ### Tradicional
                 0 10 18 20 21 43
                 
-                <h3> Segunda <h3>
-                2 6 <b>7</b> 25 33 42
+                ### Segunda
+                2 6 **7** 25 33 42
                 
-                <h3> Revancha <h3>
-                <b>7</b> 23 28 32 34 45
+                ### Revancha
+                **7** 23 28 32 34 45
                 
-                <h3> Siempre Sale <h3>
+                ### Siempre Sale
                 4 22 23 26 36 42
-                
+
 ```
+O bien interpretado:
+> Sorteo: 2614 (Wed Nov 28 2018 00:00:00 GMT-0500 (EST)
+> 
+>                 ### Tradicional
+>                 0 10 18 20 21 43
+>                 
+>                 ### Segunda
+>                 2 6 **7** 25 33 42
+>                 
+>                 ### Revancha
+>                 **7** 23 28 32 34 45
+>                 
+>                 ### Siempre Sale
+>                 4 22 23 26 36 42
+
 
 ## Archivo de configuracion
-Todavia no tiene...
+Desde el archivo de configuracion se especifican principalmente los detalles de [Nodemailer] para poder enviar correos con la opcion `-m`, el archivo de configuracion es un archivo JSON que, para el caso de nodemailer simplemente configura los 2 objetos requeridos (vea la documentacion de nodemailer para cambiar los valores por defecto):
+
+```json
+{
+    "nodemailer": {
+        "transport":{
+            "host": "smtp.zoho.com",
+            "port": 465,
+            "secure": true,
+            "auth":{
+                "user": "maildeservicio@tudominio.com",
+                "pass": "SuperS3cretPassword"
+            }
+        },
+        "options":{
+            "from": "Resultados Quini <maildeservicio@tudominio.com>",
+            "to": "tumail@tudominio.com, elmaildeunamigodellaburoquejuegaconvos@tudominio.com",
+            "subject": "Quini 6"
+        }
+    }
+}
+```
+
+No tiene muchas opciones mas el archivo pero el nodo output se puede configurar el color del resaltado en HTML:
+
+```json
+{
+    "output":{
+        "html-color": "red"
+    }
+}
+```
 
 ## Compatibilidad
 Todavia no lo se...
@@ -57,3 +105,4 @@ PROGRAMA SIN GARANTIAS. Para conseguir el ultimo sorteo, uso paginas de resultad
 
 
 [1]: https://daringfireball.net/projects/markdown/syntax
+[2]: https://nodemailer.com/about/
