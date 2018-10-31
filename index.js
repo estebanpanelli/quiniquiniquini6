@@ -28,6 +28,7 @@
 
 const fetch = require('node-fetch')
 const HTMLParser = require('node-html-parser');
+const nodemailer = require('nodemailer');
 const config = require('./config.json')
 
 global.gConfig = config
@@ -44,25 +45,6 @@ global.gTests = [{
         checkSSL: false,
         enabled: true,
     }]
-
-// let transporter = nodemailer.createTransport({
-//     host: 'smtp.ethereal.email',
-//     port: 587,
-//     secure: false, // true for 465, false for other ports
-//     auth: {
-//         user: account.user, // generated ethereal user
-//         pass: account.pass // generated ethereal password
-//     }
-// });
-
-// // setup email data with unicode symbols
-// let mailOptions = {
-//     from: '"Fred Foo 👻" <foo@example.com>', // sender address
-//     to: 'bar@example.com, baz@example.com', // list of receivers
-//     subject: 'Hello ✔', // Subject line
-//     text: 'Hello world?', // plain text body
-//     html: '<b>Hello world?</b>' // html body
-// };
 
 function fetchResults(URL, CHECKSSL, TIMEOUT) {
     return new Promise((resolve, reject) =>{
@@ -153,7 +135,7 @@ const parseQuini = {
 }
 
 const results = {
-    'check': function(SORTEO,JUGADA){
+    check: function(SORTEO,JUGADA){
         rondas = ['tradicional', 'segunda', 'revancha', 'siempresale']
         matches = {}
         var all = SORTEO.resultados.tradicional.concat(SORTEO.resultados.segunda).concat(SORTEO.resultados.revancha).concat(SORTEO.resultados.siempresale)
@@ -184,7 +166,7 @@ const results = {
 
         return separate
     },
-    'output': function(RESULTS,FORMAT){
+    output: function(RESULTS,FORMAT){
         FORMAT = FORMAT || 'colorterm'
 
         if (FORMAT == 'nagios'){
@@ -207,7 +189,7 @@ const results = {
         for (i in RESULTS.sorteos){
             if (FORMAT == 'html'){
                 text += `
-                <h3> ${RESULTS.sorteos[i].name} <h3>
+                <h3> ${RESULTS.sorteos[i].name} </h3>
                 ${RESULTS.sorteos[i].string.replace(/m(\d+)/g,'<b>$1</b>')}
                 `
             }
@@ -230,8 +212,15 @@ const results = {
 
 const runtime = {
     getArguments: function(ARGV){
-        if (/-h|--help/.test(ARGV.join(' '))) {runtime.showUsage(0)}
-        if ((r = /-o (\w+)/.exec(ARGV.join(' '))) !== null) {format = r[1]}
+        if (/ (-t|--test)/.test(ARGV.join(' '))) {return {test:true}} // No hace nada si recibe -t, es para poder usar en tests y/o como modulo
+
+        if (/ (-h|--help)/.test(ARGV.join(' '))) {runtime.showUsage(0)}
+        
+        if (/ -m/.test(ARGV.join(' '))) {mailResults = true}
+        else mailResults = false
+
+        if ((r = / -o (\w+)/.exec(ARGV.join(' '))) !== null) {format = r[1]}
+        else if (mailResults) format = 'html'
         else format = 'colorterm'
         
         var jugada = ARGV.filter(ARGUMENTS => {
@@ -243,6 +232,7 @@ const runtime = {
         try {
             if (jugada.length !== 6) throw new Error('No me pasaste los 6 valores gil')
             if (!(/^(html|colorterm|term|nagios)$/.test(format))) throw new Error('Ese output no es valido, las elecciones son html, term, colorterm o nagios')
+            if (mailResults && (/^(colorterm|term|nagios)$/.test(format))) throw new Error('La opcion mail no es compatible con ese formato de salida')
         }
         catch(error){
             console.log('\x1b[1m\x1b[31mERROR:\x1b[0m\x1b[22m ' + error)
@@ -250,7 +240,22 @@ const runtime = {
             process.exit(1)
         }
 
-        return {jugada:jugada, format:format}
+        return {jugada:jugada, format:format, mail:mailResults}
+    },
+    sendMail: function(HTML){
+        var transporter = nodemailer.createTransport(global.gConfig.nodemailer.transport);
+        var message = global.gConfig.nodemailer.options;
+        message.html = HTML
+        // message.text = HTML
+        // console.log(JSON.stringify(transporter))
+        // console.log(JSON.stringify(message))
+        transporter.sendMail(message, (err, info) => {
+            if (err) {
+                console.log('Error occurred. ' + err.message);
+                return process.exit(4);
+            }
+            console.log('Message sent: %s', info.meslsageId);
+        });
     },
     showUsage: function(EXITCODE){
         var usage = `
@@ -265,22 +270,34 @@ const runtime = {
 }
 
 // console.log(`Config: ${JSON.stringify(global.gConfig)}`)
-
+// console.log(JSON.stringify(process.argv))
 var args = runtime.getArguments(process.argv)
+// console.log(JSON.stringify(args))
 
-for (test of global.gTests){
-    if (test.enabled){
-        parseQuini[test.id](test).then(sorteo =>{
-            ganamo = results.check(sorteo,args.jugada)
-            // console.log(JSON.stringify(ganamo))
-            console.log(results.output(ganamo, args.format))
-            process.exit(0)     // Para el formato nagios el exit se hace en el output
-        }).catch(error => {
-            console.log(error.message)
-            process.exit(3)     // Sirve como UNKNOWN para Nagios
-        })
+if (!(args.test)){
+    for (test of global.gTests){
+        if (test.enabled){
+            parseQuini[test.id](test).then(sorteo =>{
+                // console.log(JSON.stringify(sorteo))
+                ganamo = results.check(sorteo,args.jugada)
+                // console.log(JSON.stringify(ganamo))
+                out = results.output(ganamo, args.format)
+                if (args.mail){
+                    console.log("mail" + out)
+                    runtime.sendMail(out)
+                } else console.log(out)
+                // process.exit(0)     // Para el formato nagios el exit se hace en el output
+            }).catch(error => {
+                console.log(error.message)
+                process.exit(3)     // Sirve como UNKNOWN para Nagios
+            })
+        }
     }
 }
-    
-
-
+else {   
+    module.exports = {
+        resultsCheck: results.check,
+        resultsOutput: results.output,
+        runtimeGetArguments: runtime.getArguments,
+    }
+}
