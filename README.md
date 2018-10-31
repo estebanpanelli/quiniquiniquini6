@@ -25,20 +25,20 @@ Proximamente `-m` para mail
 `node index.js 1 3 5 7 9 11          # Devuelve el sorteo con tus apuestas resaltadas`
 `node index.js 1 3 5 7 9 11 -o html  # Devuelve el sorteo con tus apuestas resaltadas en formato HTML (Util para mail)`
 
-A la salida se vera algo como (Formato term):
+A la salida se vera algo como (Formato html):
 ```
-                 Tradicional 
+                <h3> Tradicional <h3>
                 0 10 18 20 21 43
                 
-                 Segunda 
-                2 6 7 25 33 42
+                <h3> Segunda <h3>
+                2 6 <b>7</b> 25 33 42
                 
-                 Revancha 
-                7 23 28 32 34 45
+                <h3> Revancha <h3>
+                <b>7</b> 23 28 32 34 45
                 
-                 Siempre Sale 
+                <h3> Siempre Sale <h3>
                 4 22 23 26 36 42
-
+                
 ```
 
 ## Archivo de configuracion
