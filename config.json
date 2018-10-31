@@ -6,7 +6,7 @@
             "secure": true,
             "auth":{
                 "user": "maildeservicio@tudominio.com",
-                "pass": "Supersecret password"
+                "pass": "Supersecret"
             }
         },
         "options":{
