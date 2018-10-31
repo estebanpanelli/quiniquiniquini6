@@ -190,8 +190,8 @@ const results = {
         for (i in RESULTS.sorteos){
             if (FORMAT == 'html'){
                 text += `
-                <h4> ${RESULTS.sorteos[i].name} </h4>
-                ${RESULTS.sorteos[i].string.replace(/m(\d+)/g,'<b>$1</b>')}
+                <h4 style="margin-bottom:2px"> ${RESULTS.sorteos[i].name} </h4>
+                ${RESULTS.sorteos[i].string.replace(/m(\d+)/g,'<b style="color:green">$1</b>')}
                 `
             }
             else if (FORMAT == 'term'){
