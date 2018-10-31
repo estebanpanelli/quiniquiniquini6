@@ -184,12 +184,13 @@ const results = {
             if (FORMAT == 'colorterm'){var text = '\x1b[1m\x1b[36mPsst... Creo que ganaste algo...\x1b[0m\x1b[1m\r\n'}
             else if (FORMAT == 'html'){var text = '<h2>Psst... Creo que ganaste algo...</h2>\r\n'}
             else if (FORMAT == 'term'){var text = '\x1b[1mPsst... Creo que ganaste algo...\x1b[22m\r\n'}
+            else if (FORMAT == 'md'){var text = '##Psst... Creo que ganaste algo...'}
         } else var text = ''
 
         for (i in RESULTS.sorteos){
             if (FORMAT == 'html'){
                 text += `
-                <h3> ${RESULTS.sorteos[i].name} </h3>
+                <h4> ${RESULTS.sorteos[i].name} </h4>
                 ${RESULTS.sorteos[i].string.replace(/m(\d+)/g,'<b>$1</b>')}
                 `
             }
@@ -203,6 +204,12 @@ const results = {
                 text += `
                 \x1b[1m ${RESULTS.sorteos[i].name} \x1b[22m
                 ${RESULTS.sorteos[i].string.replace(/m(\d+)/g,'\x1b[1m\x1b[31m$1\x1b[0m\x1b[22m')}
+                `
+            }
+            else if (FORMAT == 'md'){
+                text += `
+                ### ${RESULTS.sorteos[i].name}
+                ${RESULTS.sorteos[i].string.replace(/m(\d+)/g,'**$1**')}
                 `
             }
         }
@@ -231,7 +238,7 @@ const runtime = {
         
         try {
             if (jugada.length !== 6) throw new Error('No me pasaste los 6 valores gil')
-            if (!(/^(html|colorterm|term|nagios)$/.test(format))) throw new Error('Ese output no es valido, las elecciones son html, term, colorterm o nagios')
+            if (!(/^(html|colorterm|term|nagios|md)$/.test(format))) throw new Error('Ese output no es valido, las elecciones son html, term, colorterm, md o nagios')
             if (mailResults && (/^(colorterm|term|nagios)$/.test(format))) throw new Error('La opcion mail no es compatible con ese formato de salida')
         }
         catch(error){

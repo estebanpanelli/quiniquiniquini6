@@ -11,13 +11,16 @@ npm install
 ## Uso
 El programa busca en varias paginas los resultados del ultimo sorteo de Quini6 y lo cruza contra tu jugada.
 
-`node index.js <Tu Jugada> [-o {html|term|colorterm|nagios}`
+**USO:** `node index.js <Tu Jugada> [-o {html|term|colorterm|md|nagios}`
 
 `-o` especifica el formato de salida, siendo estos:
 * **html**: STDOUT formateado en HTML
 * **term**: STDOUT formateado para salida en consola (Linux)
 * **colorterm**: STDOUT formateado para salida en consola a colores (si, adivinaste!)
+* **md**: STDOUT formateado en [Markdown] (como este README)
 * **nagios**: La salida es con codigo de error para usar con Nagios (0:ganaste algo, 2:no ganaste nada, 3:ni idea)
+
+Por defecto el formato sera `md`
 
 Proximamente `-m` para mail
 
@@ -51,3 +54,6 @@ Todavia no lo se...
 
 ## Disclaimer
 PROGRAMA SIN GARANTIAS. Para conseguir el ultimo sorteo, uso paginas de resultados con las que no tengo relacion alguna, voy a hacer mi mejor intento por mantener actualizado el programa ante cambios en estas paginas.
+
+
+[1]: https://daringfireball.net/projects/markdown/syntax
