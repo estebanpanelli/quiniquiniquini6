@@ -111,7 +111,7 @@ const parseQuini = {
                         var resultssection = true
                         var sorteo = r[1]
                         var D = r[2]
-                        var M = r[3]
+                        var M = r[3] -1
                         var Y = r[4]
                         results.date = new Date(Y,M,D)
                         results.sorteo = parseInt(sorteo)
@@ -249,10 +249,7 @@ const runtime = {
         var message = global.gConfig.nodemailer.options;
         message.html = HTML
         transporter.sendMail(message, (err, info) => {
-            if (err) {
-                log.error('Error occurred. ' + err.message);
-                return process.exit(4);
-            }
+            if (err) throw new Error(err)
             // console.log('Message sent: %s', info.meslsageId);
         });
     },
@@ -290,7 +287,13 @@ if (!(args.test)){
                 out = results.output(ganamo, args.format)
                 if (args.mail){
                     console.log("mail" + out)
-                    runtime.sendMail(out)
+                    try {
+                        runtime.sendMail(out)
+                    }
+                    catch(error) {
+                        log.error('Error occurred. ' + error);
+                        return process.exit(4);
+                    }
                 } else console.log(out)
                 // process.exit(0)     // Para el formato nagios el exit se hace en el output
             }).catch(error => {
