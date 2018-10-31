@@ -47,6 +47,11 @@ global.gTests = [{
         enabled: true,
     }]
 
+if (global.gConfig.output == undefined) {global.gConfig.output = {
+    'html-color': 'green'
+}}
+else if (global.gConfig.output['html-color'] == undefined) {global.gConfig.output['html-color'] = 'green'}
+
 function fetchResults(URL, CHECKSSL, TIMEOUT) {
     return new Promise((resolve, reject) =>{
         var fetchOptions = {
@@ -192,7 +197,7 @@ const results = {
             if (FORMAT == 'html'){
                 text += `
                 <h4 style="margin-bottom:2px"> ${RESULTS.sorteos[i].name} </h4>
-                ${RESULTS.sorteos[i].string.replace(/m(\d+)/g,'<b style="color:red">$1</b>')}
+                ${RESULTS.sorteos[i].string.replace(/m(\d+)/g,'<b style="color:'+global.gConfig.output['html-color']+'">$1</b>')}
                 `
             }
             else if (FORMAT == 'term'){
