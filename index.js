@@ -29,7 +29,8 @@
 const fetch = require('node-fetch')
 const HTMLParser = require('node-html-parser');
 const nodemailer = require('nodemailer');
-const config = require('./config.json')
+const config = require('./config.json');
+const log = require('electron-log');
 
 global.gConfig = config
 global.gTests = [{
@@ -191,7 +192,7 @@ const results = {
             if (FORMAT == 'html'){
                 text += `
                 <h4 style="margin-bottom:2px"> ${RESULTS.sorteos[i].name} </h4>
-                ${RESULTS.sorteos[i].string.replace(/m(\d+)/g,'<b style="color:green">$1</b>')}
+                ${RESULTS.sorteos[i].string.replace(/m(\d+)/g,'<b style="color:red">$1</b>')}
                 `
             }
             else if (FORMAT == 'term'){
@@ -236,16 +237,10 @@ const runtime = {
             return parseInt(NUMERO)
         })
         
-        try {
-            if (jugada.length !== 6) throw new Error('No me pasaste los 6 valores gil')
-            if (!(/^(html|colorterm|term|nagios|md)$/.test(format))) throw new Error('Ese output no es valido, las elecciones son html, term, colorterm, md o nagios')
-            if (mailResults && (/^(colorterm|term|nagios)$/.test(format))) throw new Error('La opcion mail no es compatible con ese formato de salida')
-        }
-        catch(error){
-            console.log('\x1b[1m\x1b[31mERROR:\x1b[0m\x1b[22m ' + error)
-            runtime.showUsage()
-            process.exit(1)
-        }
+        // Revision de parametros
+        if (jugada.length !== 6) throw new Error('No me pasaste los 6 valores gil')
+        if (!(/^(html|colorterm|term|nagios|md)$/.test(format))) throw new Error('Ese output no es valido, las elecciones son html, term, colorterm, md o nagios')
+        if (mailResults && (/^(colorterm|term|nagios)$/.test(format))) throw new Error('La opcion mail no es compatible con ese formato de salida')
 
         return {jugada:jugada, format:format, mail:mailResults}
     },
@@ -253,15 +248,12 @@ const runtime = {
         var transporter = nodemailer.createTransport(global.gConfig.nodemailer.transport);
         var message = global.gConfig.nodemailer.options;
         message.html = HTML
-        // message.text = HTML
-        // console.log(JSON.stringify(transporter))
-        // console.log(JSON.stringify(message))
         transporter.sendMail(message, (err, info) => {
             if (err) {
-                console.log('Error occurred. ' + err.message);
+                log.error('Error occurred. ' + err.message);
                 return process.exit(4);
             }
-            console.log('Message sent: %s', info.meslsageId);
+            // console.log('Message sent: %s', info.meslsageId);
         });
     },
     showUsage: function(EXITCODE){
@@ -278,7 +270,14 @@ const runtime = {
 
 // console.log(`Config: ${JSON.stringify(global.gConfig)}`)
 // console.log(JSON.stringify(process.argv))
-var args = runtime.getArguments(process.argv)
+try {
+    var args = runtime.getArguments(process.argv)
+}
+catch(error){
+    log.error(error)
+    runtime.showUsage()
+    process.exit(1)
+}
 // console.log(JSON.stringify(args))
 
 if (!(args.test)){
