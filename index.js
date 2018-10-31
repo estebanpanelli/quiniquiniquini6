@@ -28,9 +28,10 @@
 
 const fetch = require('node-fetch')
 const HTMLParser = require('node-html-parser');
+const config = require('./config.json')
 
-var config = {
-    tests:[{
+global.gConfig = config
+global.gTests = [{
         id: 'telekinos',
         url: 'http://www.telekinos.com.ar/quini6.html',
         timeout: 8000,
@@ -43,7 +44,7 @@ var config = {
         checkSSL: false,
         enabled: true,
     }]
-}
+
 
 function fetchResults(URL, CHECKSSL, TIMEOUT) {
     return new Promise((resolve, reject) =>{
@@ -211,7 +212,7 @@ const results = {
 
 const runtime = {
     getArguments: function(ARGV){
-        if (/-h|--help/.test(ARGV.join(' '))) {runtime.showUsage();process.exit(0)}
+        if (/-h|--help/.test(ARGV.join(' '))) {runtime.showUsage(0)}
         if ((r = /-o (\w+)/.exec(ARGV.join(' '))) !== null) {format = r[1]}
         else format = 'colorterm'
         
@@ -233,20 +234,23 @@ const runtime = {
 
         return {jugada:jugada, format:format}
     },
-    showUsage: function(){
+    showUsage: function(EXITCODE){
         var usage = `
-\x1b[1mUSAGE:\x1b[22m node index.js <Tu Jugada> [-o {html|term|colorterm|nagios}]
-\x1b[1mEXAMPLE:\x1b[22m node index.js 4 7 15 25 32 38             # Devuelve el sorteo con tus apuestas resaltadas
-\x1b[1mEXAMPLE:\x1b[22m node index.js 4 7 15 25 32 38 -o html     # Devuelve el sorteo con tus apuestas resaltadas en formato HTML (Util para mail)
-\x1b[1mEXAMPLE:\x1b[22m node index.js 4 7 15 25 32 38 -o nagios   # Devuelve codigos de error para Nagios (0:ganaste algo, 2:no ganaste nada, 3:ni idea)
+  \x1b[1mUSAGE:\x1b[22m node index.js <Tu Jugada> [-o {html|term|colorterm|nagios}]
+  \x1b[1mEXAMPLE:\x1b[22m node index.js 4 7 15 25 32 38             # Devuelve el sorteo con tus apuestas resaltadas
+  \x1b[1mEXAMPLE:\x1b[22m node index.js 4 7 15 25 32 38 -o html     # Devuelve el sorteo con tus apuestas resaltadas en formato HTML (Util para mail)
+  \x1b[1mEXAMPLE:\x1b[22m nodeaba index.js 4 7 15 25 32 38 -o nagios   # Devuelve codigos de error para Nagios (0:ganaste algo, 2:no ganaste nada, 3:ni idea)
 `
         console.log(usage)
+        if (EXITCODE !== undefined) process.exit(EXITCODE)
     },
 }
 
+console.log(`Config: ${JSON.stringify(global.gConfig)}`)
+
 var args = runtime.getArguments(process.argv)
 
-for (test of config.tests){
+for (test of global.gTests){
     if (test.enabled){
         parseQuini[test.id](test).then(sorteo =>{
             ganamo = results.check(sorteo,args.jugada)
@@ -260,3 +264,23 @@ for (test of config.tests){
     }
 }
     
+
+
+// let transporter = nodemailer.createTransport({
+//     host: 'smtp.ethereal.email',
+//     port: 587,
+//     secure: false, // true for 465, false for other ports
+//     auth: {
+//         user: account.user, // generated ethereal user
+//         pass: account.pass // generated ethereal password
+//     }
+// });
+
+// // setup email data with unicode symbols
+// let mailOptions = {
+//     from: '"Fred Foo 👻" <foo@example.com>', // sender address
+//     to: 'bar@example.com, baz@example.com', // list of receivers
+//     subject: 'Hello ✔', // Subject line
+//     text: 'Hello world?', // plain text body
+//     html: '<b>Hello world?</b>' // html body
+// };

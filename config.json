@@ -1,0 +1,18 @@
+{
+    "mail": {
+        "nodemailer":{
+            "host": "smtp.tudominio.com",
+            "port": 587,
+            "secure": false,
+            "auth":{
+                "user": "tuemail@tudominio.com",
+                "pass": "Cuidado!EsteEsUnArchivoPlano!UsaUnacUentad3Servicio!"
+            }
+        },
+        "options":{
+            "from": "User <tuemail@tudominio.com>",
+            "to": "user1@gmail.com, user2@gmail.com",
+            "subject": "Quini 6"
+        }
+    }
+}
