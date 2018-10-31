@@ -1,18 +1,21 @@
 {
-    "mail": {
-        "nodemailer":{
-            "host": "smtp.tudominio.com",
-            "port": 587,
-            "secure": false,
+    "nodemailer": {
+        "transport":{
+            "host": "smtp.zoho.com",
+            "port": 465,
+            "secure": true,
             "auth":{
-                "user": "tuemail@tudominio.com",
-                "pass": "Cuidado!EsteEsUnArchivoPlano!UsaUnacUentad3Servicio!"
+                "user": "maildeservicio@tudominio.com",
+                "pass": "Supersecret password"
             }
         },
         "options":{
-            "from": "User <tuemail@tudominio.com>",
-            "to": "user1@gmail.com, user2@gmail.com",
+            "from": "Resultados Quini <maildeservicio@tudominio.com>",
+            "to": "tumail@tudominio.com, elmaildeunamigodellaburoquejuegaconvos@tudominio.com",
             "subject": "Quini 6"
         }
+    },
+    "output": {
+        "html-color": "red"
     }
 }
