@@ -172,7 +172,7 @@ const results = {
 
         return separate
     },
-    output: function(RESULTS,FORMAT){
+    output: function(RESULTS,FORMAT,NUMSORTEO,FECHA){
         FORMAT = FORMAT || 'colorterm'
 
         if (FORMAT == 'nagios'){
@@ -190,8 +190,12 @@ const results = {
             if (FORMAT == 'colorterm'){var text = '\x1b[1m\x1b[36mPsst... Creo que ganaste algo...\x1b[0m\x1b[1m\r\n'}
             else if (FORMAT == 'html'){var text = '<h2>Psst... Creo que ganaste algo...</h2>\r\n'}
             else if (FORMAT == 'term'){var text = '\x1b[1mPsst... Creo que ganaste algo...\x1b[22m\r\n'}
-            else if (FORMAT == 'md'){var text = '##Psst... Creo que ganaste algo...'}
+            else if (FORMAT == 'md'){var text = '##Psst... Creo que ganaste algo...\r\n'}
         } else var text = ''
+
+        if (/colorterm|term/){var text = 'Sorteo: ' + NUMSORTEO + ' (' + FECHA + '\r\n'}
+        else if (FORMAT == 'html'){var text = '<p>Sorteo: ' + NUMSORTEO + ' (' + FECHA + ')</p>\r\n'}
+        else if (FORMAT == 'md'){var text = '> Sorteo: ' + NUMSORTEO + ' (' + FECHA + ')\r\n'}
 
         for (i in RESULTS.sorteos){
             if (FORMAT == 'html'){
@@ -289,7 +293,7 @@ if (!(args.test)){
                 // console.log(JSON.stringify(sorteo))
                 ganamo = results.check(sorteo,args.jugada)
                 // console.log(JSON.stringify(ganamo))
-                out = results.output(ganamo, args.format)
+                out = results.output(ganamo, args.format, sorteo.sorteo, sorteo.fecha)
                 if (args.mail){
                     console.log("mail" + out)
                     try {
