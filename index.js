@@ -296,8 +296,8 @@ if (!(args.test)){
     for (test of global.gTests){
         if (test.enabled){
             parseQuini[test.id](test).then(sorteo =>{
-                console.log(JSON.stringify(sorteo))
-                // ganamo = results.check(sorteo,args.jugada)
+                // console.log(JSON.stringify(sorteo))
+                ganamo = results.check(sorteo,args.jugada)
                 // console.log(JSON.stringify(ganamo))
                 out = results.output(ganamo, args.format, sorteo.sorteo, sorteo.fecha)
                 if (args.mail){
