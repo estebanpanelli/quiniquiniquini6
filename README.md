@@ -36,37 +36,28 @@ node index.js 1 3 5 7 9 11 -o html  # Devuelve el sorteo con tus apuestas resalt
 
 A la salida se vera algo como (Formato markdown):
 ```
-Sorteo: 2614 (Wed Nov 28 2018 00:00:00 GMT-0500 (EST)
-
-                ### Tradicional
-                0 10 18 20 21 43
-                
-                ### Segunda
-                2 6 **7** 25 33 42
-                
-                ### Revancha
-                **7** 23 28 32 34 45
-                
-                ### Siempre Sale
-                4 22 23 26 36 42
-
+>Sorteo: 2615 (31/10/2018)
+**Tradicional**
+`1` 6 15 20 32 36
+**Segunda**
+4 `5` `9` 20 22 28
+**Revancha**
+17 22 25 27 34 39
+**Siempre Sale**
+`9` 15 24 37 40 43
 ```
 O bien interpretado:
 
 ------------------------------------------------------
-Sorteo: 2614 (Wed Nov 28 2018 00:00:00 GMT-0500 (EST)
- 
-### Tradicional
-0 10 18 20 21 43
-                 
-### Segunda
-2 6 **7** 25 33 42
-                 
-### Revancha
-**7** 23 28 32 34 45
-                 
-### Siempre Sale
-4 22 23 26 36 42
+>Sorteo: 2615 (31/10/2018)
+**Tradicional**
+`1` 6 15 20 32 36
+**Segunda**
+4 `5` `9` 20 22 28
+**Revancha**
+17 22 25 27 34 39
+**Siempre Sale**
+`9` 15 24 37 40 43
 
 ------------------------------------------------------
 

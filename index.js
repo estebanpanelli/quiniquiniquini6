@@ -92,7 +92,7 @@ const parseQuini = {
                         var D = r[1]        // Dia
                         var M = r[2]        // Mes
                         var Y = r[3]        // Año
-                        var results = {fecha:new Date(Y,M,D), sorteo:parseInt(sorteo), resultados:{}}
+                        var results = {fechastr:D+'/'+M+'/'+Y, fecha:new Date(Y,M,D), sorteo:parseInt(sorteo), resultados:{}}
                     }
                     else if (resultssection) {
                         if ((r = /(\d+) - (\d+) - (\d+) - (\d+) - (\d+) - (\d+)/.exec(line)) !== null) {
@@ -123,9 +123,10 @@ const parseQuini = {
                         var resultssection = true
                         var sorteo = r[1]
                         var D = r[2]
-                        var M = r[3] -1
+                        var M = r[3]
                         var Y = r[4]
                         results.date = new Date(Y,M,D)
+                        results.datestring = D + '/' + M + '/' + Y
                         results.sorteo = parseInt(sorteo)
                     }
                     else if (resultssection) {
@@ -200,9 +201,9 @@ const results = {
             else if (FORMAT == 'md'){var text = '##Psst... Creo que ganaste algo...\r\n'}
         } else var text = ''
 
-        if (/colorterm|term/){var text = 'Sorteo: ' + NUMSORTEO + ' (' + FECHA + '\r\n'}
+        if (/colorterm|term/.test(FORMAT)){var text = 'Sorteo: ' + NUMSORTEO + ' (' + FECHA + ')\r\n'}
         else if (FORMAT == 'html'){var text = '<p>Sorteo: ' + NUMSORTEO + ' (' + FECHA + ')</p>\r\n'}
-        else if (FORMAT == 'md'){var text = '> Sorteo: ' + NUMSORTEO + ' (' + FECHA + ')\r\n'}
+        else if (FORMAT == 'md'){var text = '>Sorteo: ' + NUMSORTEO + ' (' + FECHA + ')' + '\r\n'}
 
         for (i in RESULTS.sorteos){
             if (FORMAT == 'html'){
@@ -224,8 +225,8 @@ const results = {
                 `
             }
             else if (FORMAT == 'md'){
-                text += '### ' + RESULTS.sorteos[i].name + '\r\n'
-                text += RESULTS.sorteos[i].string.replace(/m(\d+)/g,'**$1**') + '\r\n'
+                text += '**' + RESULTS.sorteos[i].name + '**\r\n'
+                text += RESULTS.sorteos[i].string.replace(/m(\d+)/g,'`$1`') + '\r\n'
             }
         }
         return text
@@ -299,7 +300,7 @@ if (!(args.test)){
                 // console.log(JSON.stringify(sorteo))
                 ganamo = results.check(sorteo,args.jugada)
                 // console.log(JSON.stringify(ganamo))
-                out = results.output(ganamo, args.format, sorteo.sorteo, sorteo.fecha)
+                out = results.output(ganamo, args.format, sorteo.sorteo, sorteo.fechastr)
                 if (args.mail){
                     console.log("mail" + out)
                     try {
