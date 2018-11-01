@@ -225,7 +225,7 @@ const results = {
             }
             else if (FORMAT == 'md'){
                 text += '### ' + RESULTS.sorteos[i].name + '\r\n'
-                text += RESULTS.sorteos[i].string.replace(/m(\d+)/g,'**$1**')
+                text += RESULTS.sorteos[i].string.replace(/m(\d+)/g,'**$1**') + '\r\n'
             }
         }
         return text
