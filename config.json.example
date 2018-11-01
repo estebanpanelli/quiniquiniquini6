@@ -1,0 +1,21 @@
+{
+    "nodemailer": {
+        "transport":{
+            "host": "smtp.zoho.com",
+            "port": 465,
+            "secure": true,
+            "auth":{
+                "user": "maildeservicio@tudominio.com",
+                "pass": "Supersecret"
+            }
+        },
+        "options":{
+            "from": "Resultados Quini <maildeservicio@tudominio.com>",
+            "to": "tumail@tudominio.com, elmaildeunamigodellaburoquejuegaconvos@tudominio.com",
+            "subject": "Quini 6"
+        }
+    },
+    "output": {
+        "html-color": "red"
+    }
+}
