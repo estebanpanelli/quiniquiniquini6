@@ -224,10 +224,8 @@ const results = {
                 `
             }
             else if (FORMAT == 'md'){
-                text += `
-                ### ${RESULTS.sorteos[i].name}
-                ${RESULTS.sorteos[i].string.replace(/m(\d+)/g,'**$1**')}
-                `
+                text += '### ' + RESULTS.sorteos[i].name + '\r\n'
+                text += RESULTS.sorteos[i].string.replace(/m(\d+)/g,'**$1**')
             }
         }
         return text
@@ -267,7 +265,7 @@ const runtime = {
         message.html = HTML
         transporter.sendMail(message, (err, info) => {
             if (err) throw new Error(err)
-            // console.log('Message sent: %s', info.meslsageId);
+            // console.log('Message sent: %s', info.messageId);
         });
     },
     showUsage: function(EXITCODE){
@@ -298,8 +296,8 @@ if (!(args.test)){
     for (test of global.gTests){
         if (test.enabled){
             parseQuini[test.id](test).then(sorteo =>{
-                // console.log(JSON.stringify(sorteo))
-                ganamo = results.check(sorteo,args.jugada)
+                console.log(JSON.stringify(sorteo))
+                // ganamo = results.check(sorteo,args.jugada)
                 // console.log(JSON.stringify(ganamo))
                 out = results.output(ganamo, args.format, sorteo.sorteo, sorteo.fecha)
                 if (args.mail){

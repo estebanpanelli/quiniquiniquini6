@@ -52,21 +52,23 @@ Sorteo: 2614 (Wed Nov 28 2018 00:00:00 GMT-0500 (EST)
 
 ```
 O bien interpretado:
+
 ------------------------------------------------------
 Sorteo: 2614 (Wed Nov 28 2018 00:00:00 GMT-0500 (EST)
  
-                 ### Tradicional
-                 0 10 18 20 21 43
+### Tradicional
+0 10 18 20 21 43
                  
-                 ### Segunda
-                 2 6 **7** 25 33 42
+### Segunda
+2 6 **7** 25 33 42
                  
-                 ### Revancha
-                 **7** 23 28 32 34 45
+### Revancha
+**7** 23 28 32 34 45
                  
-                 ### Siempre Sale
-                 4 22 23 26 36 42
-______________________________________________________
+### Siempre Sale
+4 22 23 26 36 42
+
+------------------------------------------------------
 
 ## Archivo de configuracion
 Desde el archivo de configuracion se especifican principalmente los detalles de [Nodemailer][2] para poder enviar correos con la opcion `-m`, el archivo de configuracion es un archivo JSON que, para el caso de nodemailer simplemente configura los 2 objetos requeridos (vea la documentacion de nodemailer para cambiar los valores por defecto):
