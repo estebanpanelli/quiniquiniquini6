@@ -37,6 +37,7 @@ node index.js 1 3 5 7 9 11 -o html  # Devuelve el sorteo con tus apuestas resalt
 A la salida se vera algo como (Formato markdown):
 ```
 >Sorteo: 2615 (31/10/2018)
+
 **Tradicional**
 `1` 6 15 20 32 36
 **Segunda**
@@ -50,6 +51,7 @@ O bien interpretado:
 
 ------------------------------------------------------
 >Sorteo: 2615 (31/10/2018)
+
 **Tradicional**
 `1` 6 15 20 32 36
 **Segunda**
