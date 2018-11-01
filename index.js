@@ -29,10 +29,21 @@
 const fetch = require('node-fetch')
 const HTMLParser = require('node-html-parser');
 const nodemailer = require('nodemailer');
-const config = require('./config.json');
 const log = require('electron-log');
 
-global.gConfig = config
+try {
+    const config = require('./config.json');
+    global.gConfig = config
+    if (global.gConfig.output == undefined) {global.gConfig.output = {
+        'html-color': 'green'
+    }}
+    else if (global.gConfig.output['html-color'] == undefined) {global.gConfig.output['html-color'] = 'green'}
+}
+catch(error) {
+    log.warn('No hay archivo de configuracion, la funcion de mail no estara disponible')
+    global.gNoConfig = true
+}
+
 global.gTests = [{
         id: 'telekinos',
         url: 'http://www.telekinos.com.ar/quini6.html',
@@ -47,10 +58,6 @@ global.gTests = [{
         enabled: true,
     }]
 
-if (global.gConfig.output == undefined) {global.gConfig.output = {
-    'html-color': 'green'
-}}
-else if (global.gConfig.output['html-color'] == undefined) {global.gConfig.output['html-color'] = 'green'}
 
 function fetchResults(URL, CHECKSSL, TIMEOUT) {
     return new Promise((resolve, reject) =>{
@@ -250,6 +257,7 @@ const runtime = {
         if (jugada.length !== 6) throw new Error('No me pasaste los 6 valores gil')
         if (!(/^(html|colorterm|term|nagios|md)$/.test(format))) throw new Error('Ese output no es valido, las elecciones son html, term, colorterm, md o nagios')
         if (mailResults && (/^(colorterm|term|nagios)$/.test(format))) throw new Error('La opcion mail no es compatible con ese formato de salida')
+        if (mailResults && global.gNoConfig) throw new Error('No se puede usar la funcion de mail si no hay archivo de configuracion')
 
         return {jugada:jugada, format:format, mail:mailResults}
     },
