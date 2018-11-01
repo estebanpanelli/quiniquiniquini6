@@ -203,7 +203,7 @@ const results = {
 
         if (/colorterm|term/.test(FORMAT)){var text = 'Sorteo: ' + NUMSORTEO + ' (' + FECHA + ')\r\n'}
         else if (FORMAT == 'html'){var text = '<p>Sorteo: ' + NUMSORTEO + ' (' + FECHA + ')</p>\r\n'}
-        else if (FORMAT == 'md'){var text = '>Sorteo: ' + NUMSORTEO + ' (' + FECHA + ')' + '\r\n'}
+        else if (FORMAT == 'md'){var text = '>Sorteo: ' + NUMSORTEO + ' (' + FECHA + ')' + '\r\n\r\n'}
 
         for (i in RESULTS.sorteos){
             if (FORMAT == 'html'){
@@ -225,8 +225,8 @@ const results = {
                 `
             }
             else if (FORMAT == 'md'){
-                text += '**' + RESULTS.sorteos[i].name + '**\r\n'
-                text += RESULTS.sorteos[i].string.replace(/m(\d+)/g,'`$1`') + '\r\n'
+                text += '**' + RESULTS.sorteos[i].name + '**\r\n\r\n'
+                text += RESULTS.sorteos[i].string.replace(/m(\d+)/g,'`$1`') + '\r\n\r\n'
             }
         }
         return text

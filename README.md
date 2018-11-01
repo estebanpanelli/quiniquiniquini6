@@ -39,13 +39,21 @@ A la salida se vera algo como (Formato markdown):
 >Sorteo: 2615 (31/10/2018)
 
 **Tradicional**
+
 `1` 6 15 20 32 36
+
 **Segunda**
+
 4 `5` `9` 20 22 28
+
 **Revancha**
+
 17 22 25 27 34 39
+
 **Siempre Sale**
+
 `9` 15 24 37 40 43
+
 ```
 O bien interpretado:
 
@@ -53,13 +61,21 @@ O bien interpretado:
 >Sorteo: 2615 (31/10/2018)
 
 **Tradicional**
+
 `1` 6 15 20 32 36
+
 **Segunda**
+
 4 `5` `9` 20 22 28
+
 **Revancha**
+
 17 22 25 27 34 39
+
 **Siempre Sale**
+
 `9` 15 24 37 40 43
+
 
 ------------------------------------------------------
 
