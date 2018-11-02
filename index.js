@@ -201,9 +201,9 @@ const results = {
             else if (FORMAT == 'md'){var text = '##Psst... Creo que ganaste algo...\r\n'}
         } else var text = ''
 
-        if (/colorterm|term/.test(FORMAT)){var text = 'Sorteo: ' + NUMSORTEO + ' (' + FECHA + ')\r\n'}
-        else if (FORMAT == 'html'){var text = '<p>Sorteo: ' + NUMSORTEO + ' (' + FECHA + ')</p>\r\n'}
-        else if (FORMAT == 'md'){var text = '>Sorteo: ' + NUMSORTEO + ' (' + FECHA + ')' + '\r\n\r\n'}
+        if (/colorterm|term/.test(FORMAT)){text += 'Sorteo: ' + NUMSORTEO + ' (' + FECHA + ')\r\n'}
+        else if (FORMAT == 'html'){text += '<p>Sorteo: ' + NUMSORTEO + ' (' + FECHA + ')</p>\r\n'}
+        else if (FORMAT == 'md'){text += '>Sorteo: ' + NUMSORTEO + ' (' + FECHA + ')' + '\r\n\r\n'}
 
         for (i in RESULTS.sorteos){
             if (FORMAT == 'html'){
@@ -260,10 +260,14 @@ const runtime = {
 
         return {jugada:jugada, format:format, mail:mailResults}
     },
-    sendMail: function(HTML){
+    sendMail: function(HTML,NUMSORTEO,GANASTE){
         var transporter = nodemailer.createTransport(global.gConfig.nodemailer.transport);
         var message = global.gConfig.nodemailer.options;
+
+        if (GANASTE){message.subject = 'GANASTE ALGO!! ' + message.subject + ' - Sorteo ' + NUMSORTEO}
+        else message.subject = message.subject + ' - Sorteo ' + NUMSORTEO
         message.html = HTML
+        
         transporter.sendMail(message, (err, info) => {
             if (err) throw new Error(err)
             // console.log('Message sent: %s', info.messageId);
@@ -299,12 +303,12 @@ if (!(args.test)){
             parseQuini[test.id](test).then(sorteo =>{
                 // console.log(JSON.stringify(sorteo))
                 ganamo = results.check(sorteo,args.jugada)
-                // console.log(JSON.stringify(ganamo))
                 out = results.output(ganamo, args.format, sorteo.sorteo, sorteo.fechastr)
+                console.log(ganamo.ganastealgo)
                 if (args.mail){
-                    console.log("mail" + out)
+                    // console.log("mail" + out)
                     try {
-                        runtime.sendMail(out)
+                        runtime.sendMail(out,sorteo.sorteo,ganamo.ganastealgo)
                     }
                     catch(error) {
                         log.error('Error occurred. ' + error);
